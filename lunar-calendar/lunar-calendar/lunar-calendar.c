@@ -191,7 +191,7 @@ lunar_calendar_get_property (GObject      *object,
  * 
  * Return value: a newly #LunarCalendar widget
  **/
-GtkWidget*
+LunarCalendar*
 lunar_calendar_new (void)
 {
 	return g_object_new (LUNAR_TYPE_CALENDAR, NULL);

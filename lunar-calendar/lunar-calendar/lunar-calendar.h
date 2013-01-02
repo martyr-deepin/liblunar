@@ -50,7 +50,7 @@ struct _LunarCalendarClass
 
 GType		lunar_calendar_get_type				(void) G_GNUC_CONST;
 void		lunar_calendar_set_jieri_color		(LunarCalendar *lunar, const GdkColor *color);
-GtkWidget*	lunar_calendar_new					(void);
+LunarCalendar*	lunar_calendar_new					(void);
 
 G_END_DECLS
 

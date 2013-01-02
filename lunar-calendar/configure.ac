@@ -95,7 +95,7 @@ AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
 dnl ================================================================
 dnl  Language Support 
 dnl ================================================================
-GETTEXT_PACKAGE=lunar-calendar-3.0
+GETTEXT_PACKAGE=lunar-calendar-2.0
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Define the gettext package to be used])
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
@@ -108,10 +108,10 @@ dnl check glib, gobject and liblunar
 dnl ================================================================
 
 LUNAR_DATE_REQUIRED=2.4.0
-GTK2_REQUIRED=2.28.6
-GDK2_REQUIRED=3.0.9
+GTK2_REQUIRED=2.24.10
+GDK2_REQUIRED=2.24.10
 
-PKG_CHECK_MODULES(LUNAR_CALENDAR, lunar-date-2.0 >= $LUNAR_DATE_REQUIRED gtk+-3.0 >= $GTK2_REQUIRED  gdk-3.0 >= $GDK2_REQUIRED )
+PKG_CHECK_MODULES(LUNAR_CALENDAR, lunar-date-2.0 >= $LUNAR_DATE_REQUIRED gtk+-2.0 >= $GTK2_REQUIRED  gdk-2.0 >= $GDK2_REQUIRED )
 
 AC_SUBST(LUNAR_CALENDAR_CFLAGS)
 AC_SUBST(LUNAR_CALENDAR_LIBS)
@@ -152,7 +152,7 @@ AC_SUBST(HAVE_VALA)
 
 
 AC_CONFIG_FILES([
-lunar-calendar-3.0.pc
+lunar-calendar-2.0.pc
 lunar-calendar/lunar-calendar-win32.rc
 lunar-calendar/Makefile
 tests/Makefile
