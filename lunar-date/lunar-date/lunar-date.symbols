@@ -1,0 +1,35 @@
+/* This file lists all exported symbols. It is used to generate
+ * the lunar-date.def file used to control exports on Windows.
+ * 
+ * Every symbol must be included in the right
+ * #ifdef IN_HEADER(sym) #endif and
+ * #ifdef IN_FILE(sym) #endif sections. 
+ */
+#ifdef ALL_FILES
+#define IN_FILE(x) 1
+#define IN_HEADER(x) 1
+#endif
+#if IN_HEADER(__LUNAR_DATE_H__)
+#if IN_FILE(__LUNAR_DATE_C__)
+lunar_date_error_get_type G_GNUC_CONST
+lunar_date_error_quark
+lunar_date_get_type G_GNUC_CONST
+lunar_date_new
+lunar_date_set_lunar_date
+lunar_date_set_solar_date
+lunar_date_get_jieri G_GNUC_MALLOC
+lunar_date_strftime G_GNUC_MALLOC
+lunar_date_free
+#endif
+#endif
+#if IN_HEADER(__LUNAR_VERSION_H__)
+#if IN_FILE(__LUNAR_VERSION_C__)
+lunar_date_check_version
+#endif
+#endif
+#ifdef INCLUDE_VARIABLES
+lunar_date_major_version
+lunar_date_micro_version
+lunar_date_minor_version
+#endif
+
