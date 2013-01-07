@@ -1,6 +1,6 @@
 AC_PREREQ(2.62)
 
-m4_define([lunar_calendar_major_version], [3])
+m4_define([lunar_calendar_major_version], [2])
 m4_define([lunar_calendar_minor_version], [0])
 m4_define([lunar_calendar_micro_version], [1])
 m4_define([lunar_calendar_interface_age], [0])
@@ -110,8 +110,9 @@ dnl ================================================================
 LUNAR_DATE_REQUIRED=2.4.0
 GTK2_REQUIRED=2.24.10
 GDK2_REQUIRED=2.24.10
+DTK2_REQUIRED=2.0.1
 
-PKG_CHECK_MODULES(LUNAR_CALENDAR, lunar-date-2.0 >= $LUNAR_DATE_REQUIRED gtk+-2.0 >= $GTK2_REQUIRED  gdk-2.0 >= $GDK2_REQUIRED )
+PKG_CHECK_MODULES(LUNAR_CALENDAR, lunar-date-2.0 >= $LUNAR_DATE_REQUIRED gtk+-2.0 >= $GTK2_REQUIRED  gdk-2.0 >= $GDK2_REQUIRED dtk+-2.0 >= $DTK2_REQUIRED )
 
 AC_SUBST(LUNAR_CALENDAR_CFLAGS)
 AC_SUBST(LUNAR_CALENDAR_LIBS)

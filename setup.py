@@ -9,7 +9,7 @@ def pkg_config_cflags(pkgs):
     return map(lambda path: path[2::], commands.getoutput('pkg-config --cflags-only-I %s' % (' '.join(pkgs))).split())
 
 deepin_lunar_mod = Extension('deepin_lunar', 
-                include_dirs = pkg_config_cflags(['gtk+-2.0', 'pygtk-2.0', 'lunar-calendar-2.0']),
+                include_dirs = pkg_config_cflags(['dtk+-2.0', 'pygtk-2.0', 'lunar-calendar-2.0']),
                 libraries = ['glib-2.0', 'lunar-calendar-2.0'], 
                 sources = ['deepin_lunar_python.c'])
 

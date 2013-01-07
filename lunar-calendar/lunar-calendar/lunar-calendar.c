@@ -63,14 +63,14 @@ static void lunar_calendar_get_property  (GObject          *object,
 		GValue           *value,
 		GParamSpec       *pspec);
 
-static void lunar_calendar_month_changed (GtkCalendar *calendar, gpointer     user_data);
-void  lunar_calendar_day_selected(GtkCalendar *calendar);
+static void lunar_calendar_month_changed (DtkCalendar *calendar, gpointer     user_data);
+void  lunar_calendar_day_selected(DtkCalendar *calendar);
 static void lunar_calendar_finalize (GObject *gobject);
 static void lunar_calendar_dispose (GObject *gobject);
 static void lunar_calendar_init_i18n(void);
 
 static gchar*
-calendar_detail_cb (GtkCalendar *gcalendar,
+calendar_detail_cb (DtkCalendar *gcalendar,
 		guint        year,
 		guint        month,
 		guint        day,
@@ -83,7 +83,7 @@ lunar_calendar_class_init (LunarCalendarClass *class)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-	GtkCalendarClass *gcalendar_class = GTK_CALENDAR_CLASS (class);
+	DtkCalendarClass *gcalendar_class = DTK_CALENDAR_CLASS (class);
 
 	gobject_class->set_property = lunar_calendar_set_property;
 	gobject_class->get_property = lunar_calendar_get_property;
@@ -109,8 +109,8 @@ lunar_calendar_init (LunarCalendar *calendar)
 	/* FIXME: here we can setup the locale info, but it looks like not a good idea */
 	lunar_calendar_init_i18n();
 
-	if (gtk_calendar_get_display_options(GTK_CALENDAR(calendar)) & GTK_CALENDAR_SHOW_DETAILS)
-		gtk_calendar_set_detail_func (GTK_CALENDAR (calendar), calendar_detail_cb, calendar, NULL);
+	if (dtk_calendar_get_display_options(DTK_CALENDAR(calendar)) & DTK_CALENDAR_SHOW_DETAILS)
+		dtk_calendar_set_detail_func (DTK_CALENDAR (calendar), calendar_detail_cb, calendar, NULL);
 }
 
 static void
@@ -191,7 +191,7 @@ lunar_calendar_get_property (GObject      *object,
  * 
  * Return value: a newly #LunarCalendar widget
  **/
-LunarCalendar*
+GtkWidget*
 lunar_calendar_new (void)
 {
 	return g_object_new (LUNAR_TYPE_CALENDAR, NULL);
@@ -214,7 +214,7 @@ void		lunar_calendar_set_jieri_color		(LunarCalendar *lunar, const GdkColor *col
 	gtk_widget_queue_draw(GTK_WIDGET(lunar));
 }
 
-void  lunar_calendar_day_selected(GtkCalendar *calendar)
+void  lunar_calendar_day_selected(DtkCalendar *calendar)
 {
 	guint year, month, day;
 	LunarDate *lunar;
@@ -230,7 +230,7 @@ void  lunar_calendar_day_selected(GtkCalendar *calendar)
 	}
 
 	LunarCalendarPrivate *priv = LUNAR_CALENDAR_GET_PRIVATE (calendar);
-	gtk_calendar_get_date(calendar, &year, &month, &day);
+	dtk_calendar_get_date(calendar, &year, &month, &day);
 	lunar_date_set_solar_date(priv->date, year, month + 1, day, 0, &error);
 	char *jieri = lunar_date_get_jieri(priv->date, "\n");
 	char *format = g_strdup_printf(_("%(year)-%(month)-%(day)\nLunar:%(YUE)Month%(RI)Day\nGanzhi:%(Y60)Year%(M60)Month%(D60)Day\nBazi:%(Y8)Year%(M8)Month%(D8)Day\nShengxiao:%(shengxiao)\n<span foreground=\"blue\">%s</span>\n"), jieri);
@@ -242,7 +242,7 @@ void  lunar_calendar_day_selected(GtkCalendar *calendar)
 }
 
 static gchar*
-calendar_detail_cb (GtkCalendar *gcalendar,
+calendar_detail_cb (DtkCalendar *gcalendar,
 		guint        year,
 		guint        month,
 		guint        day,

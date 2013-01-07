@@ -22,7 +22,7 @@
 #ifndef __LUNAR_CALENDAR_H__ 
 #define __LUNAR_CALENDAR_H__  1
 
-#include <gtk/gtk.h>
+#include <dtk/dtk.h>
 
 G_BEGIN_DECLS
 
@@ -39,18 +39,18 @@ typedef struct _LunarCalendarPrivate      LunarCalendarPrivate;
 
 struct _LunarCalendar
 {
-	GtkCalendar		calendar;
+	DtkCalendar		calendar;
 	LunarCalendarPrivate   *priv;
 };
 
 struct _LunarCalendarClass
 {
-	GtkCalendarClass     parent_class;
+	DtkCalendarClass     parent_class;
 };
 
 GType		lunar_calendar_get_type				(void) G_GNUC_CONST;
 void		lunar_calendar_set_jieri_color		(LunarCalendar *lunar, const GdkColor *color);
-LunarCalendar*	lunar_calendar_new					(void);
+GtkWidget*	lunar_calendar_new					(void);
 
 G_END_DECLS
 
