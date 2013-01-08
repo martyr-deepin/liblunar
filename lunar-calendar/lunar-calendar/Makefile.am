@@ -88,28 +88,6 @@ liblunar_calendar_preload_2_0_la_LIBADD = 	\
 	-ldl			\
 	$(NULL)
 
-if HAVE_INTROSPECTION
--include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_GIRS = LunarCalendar-2.0.gir
-INTROSPECTION_SCANNER_ARGS = -I$(top_srcdir) -I$(srcdir) $(LUNAR_CALENDAR_CFLAGS) --warn-all --identifier-prefix=Lunar
-#INTROSPECTION_COMPILER_ARGS = $(LUNAR_CALENDAR_LIBS) liblunar-calendar-2.0.la
-
-LunarCalendar-2.0.gir: liblunar-calendar-2.0.la
-LunarCalendar_2_0_gir_NAMESPACE = LunarCalendar
-LunarCalendar_2_0_gir_VERSION = 2.0
-LunarCalendar_2_0_gir_LIBS = $(builddir)/liblunar-calendar-2.0.la
-LunarCalendar_2_0_gir_FILES = $(source_h) $(source_c)
-LunarCalendar_2_0_gir_INCLUDES = Gtk-2.0 LunarDate-2.0
-
-girdir = $(datadir)/gir-1.0
-dist_gir_DATA = $(INTROSPECTION_GIRS)
-
-typelibdir = $(libdir)/girepository-1.0
-typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-
-CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
-endif
-
 EXTRA_DIST =  lunar-calendar-win32.rc.in lunar-calendar.symbols
 
 -include $(top_srcdir)/git.mk

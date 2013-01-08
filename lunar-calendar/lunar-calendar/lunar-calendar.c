@@ -76,7 +76,7 @@ calendar_detail_cb (DtkCalendar *gcalendar,
 		guint        day,
 		gpointer     data);
 
-G_DEFINE_TYPE (LunarCalendar, lunar_calendar, GTK_TYPE_CALENDAR);
+G_DEFINE_TYPE (LunarCalendar, lunar_calendar, DTK_TYPE_CALENDAR);
 
 static void
 lunar_calendar_class_init (LunarCalendarClass *class)
