@@ -1,6 +1,12 @@
-liblunar for gtk+-2.0
+liblunar for Dtk+-2.0
 
-编译 && 安装
+depend
+======
+Dtk+-2.0
+git clone git@github.com:xiangzhai/dtk.git
+
+build && install
+================
 1. 
 cd lunar-date
 ./autogen.sh --prefix=/usr
