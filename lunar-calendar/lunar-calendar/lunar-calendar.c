@@ -1,8 +1,9 @@
-/* vi: set sw=4 ts=4: */
 /*
  * lunar-calendar.c: This file is part of lunar-calendar.
  *
  * Copyright (C) 2009 yetist <yetist@gmail.com>
+ * Copyright (C) 2013 Deepin Inc.
+ * Copyright (C) 2013 Zhai Xiang <zhaixiang@linuxdeepin.com>
  *
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -32,10 +33,10 @@
 
 /**
  * SECTION:lunar-calendar
- * @Short_description: Chinese Lunar Calendar widget for GTK+
+ * @Short_description: Chinese Lunar Calendar widget for DTK+
  * @Title: LunarCalendar
  *
- * The #LunarDate provide Chinese lunar Calendar Wieget for GTK+ .
+ * The #LunarDate provide Chinese lunar Calendar Wieget for DTK+ .
  */
 
 enum {
@@ -47,6 +48,8 @@ enum {
 };
 
 #define LUNAR_CALENDAR_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE((obj), LUNAR_TYPE_CALENDAR, LunarCalendarPrivate))
+
+#define DAY_DETAIL_HOLIDAY_FG_COLOR "#625DDA"
 
 struct _LunarCalendarPrivate
 {
@@ -63,18 +66,18 @@ static void lunar_calendar_get_property  (GObject          *object,
 		GValue           *value,
 		GParamSpec       *pspec);
 
-static void lunar_calendar_month_changed (DtkCalendar *calendar, gpointer     user_data);
+static void lunar_calendar_month_changed(DtkCalendar *calendar, 
+                                         gpointer user_data);
 void  lunar_calendar_day_selected(DtkCalendar *calendar);
 static void lunar_calendar_finalize (GObject *gobject);
 static void lunar_calendar_dispose (GObject *gobject);
 static void lunar_calendar_init_i18n(void);
 
-static gchar*
-calendar_detail_cb (DtkCalendar *gcalendar,
-		guint        year,
-		guint        month,
-		guint        day,
-		gpointer     data);
+static gchar *calendar_detail_cb (DtkCalendar *gcalendar, 
+                                  guint        year, 
+                                  guint        month, 
+                                  guint        day, 
+                                  gpointer     data);
 
 G_DEFINE_TYPE (LunarCalendar, lunar_calendar, DTK_TYPE_CALENDAR);
 
@@ -87,8 +90,9 @@ lunar_calendar_class_init (LunarCalendarClass *class)
 
 	gobject_class->set_property = lunar_calendar_set_property;
 	gobject_class->get_property = lunar_calendar_get_property;
-	//gobject_class->dispose = lunar_calendar_dispose;
-	//gobject_class->finalize = lunar_calendar_finalize;
+    /* TODO: yetist, no comenting destruction, otherwise memory leak :( */
+    gobject_class->dispose = lunar_calendar_dispose;
+	gobject_class->finalize = lunar_calendar_finalize;
 	gcalendar_class->day_selected = lunar_calendar_day_selected;
 
 	g_type_class_add_private (class, sizeof (LunarCalendarPrivate));
@@ -106,11 +110,18 @@ lunar_calendar_init (LunarCalendar *calendar)
 	priv->color->green = 0x0;
 	priv->color->blue = 0xffff;
 
-	/* FIXME: here we can setup the locale info, but it looks like not a good idea */
+	/* FIXME: here we can setup the locale info, 
+     *        but it looks like not a good idea 
+     *        
+     * TODO: but yetist, come on, it is not the issue :)
+     */
 	lunar_calendar_init_i18n();
 
-	if (dtk_calendar_get_display_options(DTK_CALENDAR(calendar)) & DTK_CALENDAR_SHOW_DETAILS)
-		dtk_calendar_set_detail_func (DTK_CALENDAR (calendar), calendar_detail_cb, calendar, NULL);
+	if (dtk_calendar_get_display_options(
+        DTK_CALENDAR(calendar)) & DTK_CALENDAR_SHOW_DETAILS) {
+		dtk_calendar_set_detail_func(
+            DTK_CALENDAR(calendar), calendar_detail_cb, calendar, NULL);
+    }
 }
 
 static void
@@ -118,32 +129,35 @@ lunar_calendar_finalize (GObject *gobject)
 {
 	LunarCalendar *calendar;
 
-	calendar = LUNAR_CALENDAR (gobject);
+	calendar = LUNAR_CALENDAR(gobject);
 	lunar_date_free(calendar->priv->date);
 	gdk_color_free(calendar->priv->color);
 
-	G_OBJECT_CLASS (lunar_calendar_parent_class)->finalize(gobject);
+	G_OBJECT_CLASS(lunar_calendar_parent_class)->finalize(gobject);
 }
 
-static void
-lunar_calendar_dispose (GObject *gobject)
+static void lunar_calendar_dispose(GObject *gobject)
 {
 	LunarCalendar *calendar;
 
-	calendar = LUNAR_CALENDAR (gobject);
+	calendar = LUNAR_CALENDAR(gobject);
+    if (!calendar) 
+        return;
 
-  if (calendar->priv->date)
-    {
-      g_object_unref (calendar->priv->date);
-      calendar->priv->date = NULL;
+    /* FIXME: yetist, why priv is NULL, i will check it ASAP :) */
+    if (!calendar->priv) 
+        return;
+
+    if (calendar->priv->date) {
+        g_object_unref(calendar->priv->date);
+        calendar->priv->date = NULL;
     }
-  if (calendar->priv->color)
-    {
-      g_object_unref (calendar->priv->color);
-	  calendar->priv->color = NULL;
+    if (calendar->priv->color) {
+        g_object_unref(calendar->priv->color);
+	    calendar->priv->color = NULL;
 	}
 
-  G_OBJECT_CLASS (lunar_calendar_parent_class)->dispose(gobject);
+    G_OBJECT_CLASS (lunar_calendar_parent_class)->dispose(gobject);
 }
 
 static void
@@ -241,52 +255,51 @@ void  lunar_calendar_day_selected(DtkCalendar *calendar)
 	g_free(strtime);
 }
 
-static gchar*
-calendar_detail_cb (DtkCalendar *gcalendar,
-		guint        year,
-		guint        month,
-		guint        day,
-		gpointer     data)
+static gchar *calendar_detail_cb(DtkCalendar *gcalendar, 
+                                 guint        year, 
+                                 guint        month, 
+                                 guint        day, 
+                                 gpointer     data)
 {
 	GError *error = NULL;
 	LunarCalendar *calendar = LUNAR_CALENDAR(data);
 	LunarCalendarPrivate *priv = LUNAR_CALENDAR_GET_PRIVATE (calendar);
 	gboolean show_detail;
-	g_object_get (calendar, "show-details", &show_detail, NULL);
-	if (! show_detail)
+	g_object_get(calendar, "show-details", &show_detail, NULL);
+	if (!show_detail)
 		return NULL;
 
 	lunar_date_set_solar_date(priv->date, year, month + 1, day, 0, &error);
 	if (error)
-	{
 		return NULL;
-	}
 
-	if (getenv("LUNAR_CALENDAR_IGNORE_NON_CHINESE") != NULL)
-	{
+	if (getenv("LUNAR_CALENDAR_IGNORE_NON_CHINESE")) {
 		const gchar* const * langs =  g_get_language_names();
 
-		if (langs[0] && langs[0][0] != '\0')
-			if (!g_str_has_prefix(langs[0], "zh_"))
-			{
+		if (langs[0] && langs[0][0] != '\0') {
+			if (!g_str_has_prefix(langs[0], "zh_")) {
 				g_object_set (calendar, "show-details", FALSE, NULL);
 				return NULL;
 			}
+        }
 	}
 
-	char* buf;
-	gchar *val;
+	char *buf = NULL;
+	gchar *val = NULL;
 
-	if (strlen(buf = lunar_date_strftime(priv->date, "%(jieri)")) > 0)
-	{
+	if (strlen(buf = lunar_date_strftime(priv->date, "%(jieri)")) > 0) {
 		gchar* col = gdk_color_to_string(priv->color);
-		val = g_strconcat("<span foreground=\"", col, "\">", buf, "</span>", NULL);
+		val = g_strconcat("<span foreground=\"", 
+                          DAY_DETAIL_HOLIDAY_FG_COLOR, 
+                          "\">", 
+                          buf, 
+                          "</span>", 
+                          NULL);
 		g_free(col);
 		g_free(buf);
 		return val;
 	}
-	if (strcmp(buf = lunar_date_strftime(priv->date, "%(ri)"), "1") == 0)
-	{
+	if (strcmp(buf = lunar_date_strftime(priv->date, "%(ri)"), "1") == 0) {
 		g_free(buf);
 		return lunar_date_strftime(priv->date, _("%(YUE)Yue"));
 	}

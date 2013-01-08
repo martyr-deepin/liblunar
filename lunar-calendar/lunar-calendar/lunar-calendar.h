@@ -1,9 +1,9 @@
-/* vi: set sw=4 ts=4: */
 /*
  * lunar-calendar.h: This file is part of lunar-calendar.
  *
  * Copyright (C) 2009 yetist <yetist@gmail.com>
- *
+ * Copyright (C) 2013 Deepin Inc.
+ * Copyright (C) 2013 Zhai Xiang <zhaixiang@linuxdeepin.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #ifndef __LUNAR_CALENDAR_H__ 
 #define __LUNAR_CALENDAR_H__  1
 
+/* TODO: do not using ugly GtkCalendar */
 #include <dtk/dtk.h>
 
 G_BEGIN_DECLS
@@ -55,7 +56,3 @@ GtkWidget*	lunar_calendar_new					(void);
 G_END_DECLS
 
 #endif /* __LUNAR_CALENDAR_H__ */
-
-/*
-vi:ts=4:wrap:ai:
-*/
