@@ -23,6 +23,8 @@
 #include <pygobject.h>
 #include <lunar-calendar/lunar-calendar.h>
 
+#define ERROR(v) PyErr_SetString(PyExc_TypeError, v)
+
 /* Safe XDECREF for object states that handles nested deallocations */
 #define ZAP(v) do {\
     PyObject *tmp = (PyObject *)(v); \
@@ -40,7 +42,7 @@ static PyObject *m_deepin_lunar_object_constants = NULL;
 static PyTypeObject *m_DeepinLunar_Type = NULL;
 
 static DeepinLunarObject *m_init_deepin_lunar_object();
-static PyObject *m_new(PyObject *self, PyObject *args);
+static DeepinLunarObject *m_new(PyObject *self, PyObject *args);
 
 static PyMethodDef deepin_lunar_methods[] = 
 {
@@ -48,11 +50,15 @@ static PyMethodDef deepin_lunar_methods[] =
     {NULL, NULL, 0, NULL}
 };
 
+static PyObject *m_get_handle(DeepinLunarObject *self);
 static PyObject *m_delete(DeepinLunarObject *self);
+static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args);
 
 static PyMethodDef deepin_lunar_object_methods[] = 
 {
     {"delete", m_delete, METH_NOARGS, "Deepin Lunar Object Destruction"}, 
+    {"get_handle", m_get_handle, METH_NOARGS, "Get pygobject"}, 
+    {"mark_day", m_mark_day, METH_VARARGS, "Mark day"}, 
     {NULL, NULL, 0, NULL}
 };
 
@@ -108,21 +114,21 @@ static int m_setattr(PyObject **dict, char *name, PyObject *v)
     return PyDict_SetItemString(*dict, name, v);
 }
 
-static PyObject *m_deepin_lunar_getattr(DeepinLunarObject *dgo, 
+static PyObject *m_deepin_lunar_getattr(DeepinLunarObject *dlo, 
                                         char *name) 
 {
-    return m_getattr((PyObject *)dgo, 
+    return m_getattr((PyObject *)dlo, 
                      name, 
-                     dgo->dict, 
+                     dlo->dict, 
                      m_deepin_lunar_object_constants, 
                      deepin_lunar_object_methods);
 }
 
-static PyObject *m_deepin_lunar_setattr(DeepinLunarObject *dgo, 
+static PyObject *m_deepin_lunar_setattr(DeepinLunarObject *dlo, 
                                         char *name, 
                                         PyObject *v) 
 {
-    return m_setattr(&dgo->dict, name, v);
+    return m_setattr(&dlo->dict, name, v);
 }
 
 static PyObject *m_deepin_lunar_traverse(DeepinLunarObject *self, 
@@ -203,7 +209,7 @@ static DeepinLunarObject *m_init_deepin_lunar_object()
     return self;
 }
 
-static PyObject *m_new(PyObject *dummy, PyObject *args) 
+static DeepinLunarObject *m_new(PyObject *dummy, PyObject *args) 
 {
     DeepinLunarObject *self = NULL;
     
@@ -213,6 +219,11 @@ static PyObject *m_new(PyObject *dummy, PyObject *args)
     
     self->handle = lunar_calendar_new();
     
+    return self;
+}
+
+static PyObject *m_get_handle(DeepinLunarObject *self) 
+{
     return pygobject_new(G_OBJECT(self->handle));
 }
 
@@ -223,4 +234,19 @@ static PyObject *m_delete(DeepinLunarObject *self)
 
     Py_INCREF(Py_None);
     return Py_None;
+}
+
+static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args) 
+{
+    gint day = -1;                                                            
+                                                                                
+    if (!PyArg_ParseTuple(args, "i", &day)) {                          
+        ERROR("invalid arguments to mark_day");                                  
+        return NULL;                                                            
+    }            
+
+    xtk_calendar_mark_day(self->handle, day);
+
+    Py_INCREF(Py_True);                                                         
+    return Py_True; 
 }

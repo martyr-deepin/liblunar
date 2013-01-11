@@ -19,6 +19,7 @@ int main(int argc, char **argv)
     align = gtk_alignment_new(0.0, 0.0, 0.0, 0.0);
     gtk_alignment_set_padding(align, 10, 10, 10, 10);
     calendar = lunar_calendar_new();
+    xtk_calendar_mark_day(calendar, 11);
     gtk_widget_set_size_request(calendar, 380, 280);
     gtk_container_add(GTK_CONTAINER(align), calendar);
     gtk_container_add(GTK_CONTAINER(window), align);
