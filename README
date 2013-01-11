@@ -1,6 +1,6 @@
 liblunar for Xtk+-2.0
 
-depend
+依赖
 ======
 Xtk+-2.0
 git clone git@github.com:xiangzhai/xtk.git
