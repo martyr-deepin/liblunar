@@ -66,8 +66,6 @@ GTK_DOC_CHECK([1.0],[--flavour=no-tmpl])
 dnl make sure we keep ACLOCAL_FLAGS around for maintainer builds to work
 AC_SUBST(ACLOCAL_AMFLAGS, "$ACLOCAL_FLAGS -I m4")
 
-GOBJECT_INTROSPECTION_CHECK([0.6.7])
-
 AC_PATH_PROG(GLIB_MKENUMS, glib-mkenums)
 
 AC_SUBST(ACLOCAL_AMFLAGS, "$ACLOCAL_FLAGS -I m4")
@@ -141,39 +139,6 @@ AC_ARG_ENABLE(run-in-source-tree,
 if test x$ENABLE_RUN_IN_SOURCE_TREE = xyes; then
 	AC_DEFINE(RUN_IN_SOURCE_TREE, 1, [enable search for holiday.dat file in local directory])
 fi
-
-dnl ================================================================
-dnl vala bindings support
-dnl ================================================================
-AC_ARG_ENABLE(vala-bindings,
-  AC_HELP_STRING([--enable-vala-bindings],
-                 [build the EXPERIMENTAL Vala bindings]),
-                  enable_vala_bindings=$enableval,
-                  enable_vala_bindings=no )
-have_vala=no
-if test x$enable_vala_bindings = xyes; then
-  if test "x$INTROSPECTION_SCANNER" = x; then
-    AC_MSG_ERROR([GObject-Introspection must be enabled for Vala bindings])
-  fi
-
-  AM_PROG_VALAC([0.10.0])
-  have_vala=yes
-
-  AC_PATH_PROG(VALAC, valac, valac)
-  AC_SUBST(VALAC)
-  AC_SUBST(VALAFLAGS)
-
-  AC_PATH_PROG([VAPIGEN], [vapigen], [false])
-
-  if test "x$VAPIGEN" = "xfalse"; then
-    AC_MSG_ERROR([vapigen not found. Was vala compiled with --enable-vapigen?])
-  fi
-
-  AC_SUBST(VAPIGEN)
-fi
-
-AM_CONDITIONAL([HAVE_VALA], [test "x$have_vala" = "xyes"])
-AC_SUBST(HAVE_VALA)
 
 dnl ================================================================
 dnl  Language Support 

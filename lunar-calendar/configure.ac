@@ -48,8 +48,6 @@ GTK_DOC_CHECK([1.0],[--flavour=no-tmpl])
 dnl make sure we keep ACLOCAL_FLAGS around for maintainer builds to work
 AC_SUBST(ACLOCAL_AMFLAGS, "$ACLOCAL_FLAGS -I m4")
 
-GOBJECT_INTROSPECTION_CHECK([0.6.7])
-
 AC_PATH_PROG(GLIB_MKENUMS, glib-mkenums)
 
 dnl ================================================================
@@ -117,41 +115,6 @@ PKG_CHECK_MODULES(LUNAR_CALENDAR, lunar-date-2.0 >= $LUNAR_DATE_REQUIRED gdk-2.0
 AC_SUBST(LUNAR_CALENDAR_CFLAGS)
 AC_SUBST(LUNAR_CALENDAR_LIBS)
 
-dnl ================================================================
-dnl vala bindings support
-dnl ================================================================
-AC_ARG_ENABLE(vala-bindings,
-  AC_HELP_STRING([--enable-vala-bindings],
-                 [build the EXPERIMENTAL Vala bindings]),
-                  enable_vala_bindings=$enableval,
-                  enable_vala_bindings=no )
-
-have_vala=no
-if test x$enable_vala_bindings = xyes; then
-  if test "x$INTROSPECTION_SCANNER" = x; then
-    AC_MSG_ERROR([GObject-Introspection must be enabled for Vala bindings])
-  fi
-
-  AM_PROG_VALAC([0.10.0])
-  have_vala=yes
-
-  AC_PATH_PROG(VALAC, valac, valac)
-  AC_SUBST(VALAC)
-  AC_SUBST(VALAFLAGS)
-
-  AC_PATH_PROG([VAPIGEN], [vapigen], [false])
-
-  if test "x$VAPIGEN" = "xfalse"; then
-    AC_MSG_ERROR([vapigen not found. Was vala compiled with --enable-vapigen?])
-  fi
-
-  AC_SUBST(VAPIGEN)
-fi
-
-AM_CONDITIONAL([HAVE_VALA], [test "x$have_vala" = "xyes"])
-AC_SUBST(HAVE_VALA)
-
-
 AC_CONFIG_FILES([
 lunar-calendar-2.0.pc
 lunar-calendar/lunar-calendar-win32.rc
@@ -162,7 +125,6 @@ docs/Makefile
 docs/reference/Makefile
 docs/reference/version.xml
 Makefile
-vapi/Makefile
 ])
 
 AC_OUTPUT
@@ -173,7 +135,5 @@ Build options:
   Build shared libs         ${enable_shared}
   Build static libs         ${enable_static}
   CFLAGS                    ${CFLAGS}
-  Build introspection       ${found_introspection}
-  Build vala binding        ${have_vala}
   Build document            ${enable_gtk_doc}
 ])

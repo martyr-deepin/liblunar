@@ -98,28 +98,6 @@ lunar-date-enum-types.c: lunar-date-enum-types.c.template $(source_h) $(GLIB_MKE
 	$(AM_V_GEN) (cd $(srcdir) && $(GLIB_MKENUMS) --template lunar-date-enum-types.c.template $(source_h)) > $@
 DISTCLEANFILES = lunar-date-enum-types.h lunar-date-enum-types.c
 
-if HAVE_INTROSPECTION
--include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_GIRS = LunarDate-2.0.gir
-#INTROSPECTION_COMPILER_ARGS - Additional args to pass in to the compiler
-
-LunarDate-2.0.gir: liblunar-date-2.0.la
-INTROSPECTION_SCANNER_ARGS = -I$(top_srcdir) -I$(srcdir) --warn-all --identifier-prefix=Lunar
-LunarDate_2_0_gir_NAMESPACE = LunarDate
-LunarDate_2_0_gir_VERSION = 2.0
-LunarDate_2_0_gir_LIBS = $(builddir)/liblunar-date-2.0.la
-LunarDate_2_0_gir_FILES = $(source_h) $(source_c) $(BUILT_SOURCES)
-LunarDate_2_0_gir_INCLUDES = GObject-2.0
-
-girdir = $(datadir)/gir-1.0
-dist_gir_DATA = $(INTROSPECTION_GIRS)
-
-typelibdir = $(libdir)/girepository-1.0
-typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-
-CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
-endif
-
 EXTRA_DIST =  lunar-date-enum-types.h.template lunar-date-enum-types.c.template lunar-date-private.h lunar-version.h.in lunar-date-win32.rc.in lunar-date.symbols
 
 -include $(top_srcdir)/git.mk

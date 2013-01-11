@@ -33,10 +33,6 @@ MAINTAINERCLEANFILES = 		\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = lunar-calendar-2.0.pc
 
-if HAVE_VALA
-SUBDIRS += vapi
-endif
-
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
 
 .PHONY: release sanity snapshot snapcheck ChangeLog

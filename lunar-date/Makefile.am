@@ -40,13 +40,7 @@ MAINTAINERCLEANFILES = 		\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = lunar-date-2.0.pc
 
-if HAVE_INTROSPECTION
-if HAVE_VALA
-SUBDIRS += vapi
-endif
-endif
-
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
 .PHONY: release sanity snapshot snapcheck ChangeLog
 
