@@ -33,10 +33,10 @@
 
 /**
  * SECTION:lunar-calendar
- * @Short_description: Chinese Lunar Calendar widget for XTK+
+ * @Short_description: Chinese Lunar Calendar widget for DLTK+
  * @Title: LunarCalendar
  *
- * The #LunarDate provide Chinese lunar Calendar Wieget for XTK+ .
+ * The #LunarDate provide Chinese lunar Calendar Wieget for DLTK+ .
  */
 
 enum {
@@ -66,27 +66,27 @@ static void lunar_calendar_get_property  (GObject          *object,
 		GValue           *value,
 		GParamSpec       *pspec);
 
-static void lunar_calendar_month_changed(XtkCalendar *calendar, 
+static void lunar_calendar_month_changed(DLtkCalendar *calendar, 
                                          gpointer user_data);
-void  lunar_calendar_day_selected(XtkCalendar *calendar);
+void  lunar_calendar_day_selected(DLtkCalendar *calendar);
 static void lunar_calendar_finalize (GObject *gobject);
 static void lunar_calendar_dispose (GObject *gobject);
 static void lunar_calendar_init_i18n(void);
 
-static gchar *calendar_detail_cb (XtkCalendar *gcalendar, 
+static gchar *calendar_detail_cb (DLtkCalendar *gcalendar, 
                                   guint        year, 
                                   guint        month, 
                                   guint        day, 
                                   gpointer     data);
 
-G_DEFINE_TYPE (LunarCalendar, lunar_calendar, XTK_TYPE_CALENDAR);
+G_DEFINE_TYPE (LunarCalendar, lunar_calendar, DLTK_TYPE_CALENDAR);
 
 static void
 lunar_calendar_class_init (LunarCalendarClass *class)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-	XtkCalendarClass *gcalendar_class = XTK_CALENDAR_CLASS (class);
+	DLtkCalendarClass *gcalendar_class = DLTK_CALENDAR_CLASS (class);
 
 	gobject_class->set_property = lunar_calendar_set_property;
 	gobject_class->get_property = lunar_calendar_get_property;
@@ -117,10 +117,10 @@ lunar_calendar_init (LunarCalendar *calendar)
      */
 	lunar_calendar_init_i18n();
 
-	if (xtk_calendar_get_display_options(
-        XTK_CALENDAR(calendar)) & XTK_CALENDAR_SHOW_DETAILS) {
-		xtk_calendar_set_detail_func(
-            XTK_CALENDAR(calendar), calendar_detail_cb, calendar, NULL);
+	if (dltk_calendar_get_display_options(
+        DLTK_CALENDAR(calendar)) & DLTK_CALENDAR_SHOW_DETAILS) {
+		dltk_calendar_set_detail_func(
+            DLTK_CALENDAR(calendar), calendar_detail_cb, calendar, NULL);
     }
 }
 
@@ -228,7 +228,7 @@ void		lunar_calendar_set_jieri_color		(LunarCalendar *lunar, const GdkColor *col
 	gtk_widget_queue_draw(GTK_WIDGET(lunar));
 }
 
-void  lunar_calendar_day_selected(XtkCalendar *calendar)
+void  lunar_calendar_day_selected(DLtkCalendar *calendar)
 {
 	guint year, month, day;
 	LunarDate *lunar;
@@ -244,7 +244,7 @@ void  lunar_calendar_day_selected(XtkCalendar *calendar)
 	}
 
 	LunarCalendarPrivate *priv = LUNAR_CALENDAR_GET_PRIVATE (calendar);
-	xtk_calendar_get_date(calendar, &year, &month, &day);
+	dltk_calendar_get_date(calendar, &year, &month, &day);
 	lunar_date_set_solar_date(priv->date, year, month + 1, day, 0, &error);
 	char *jieri = lunar_date_get_jieri(priv->date, "\n");
 	char *format = g_strdup_printf(_("%(year)-%(month)-%(day)\nLunar:%(YUE)Month%(RI)Day\nGanzhi:%(Y60)Year%(M60)Month%(D60)Day\nBazi:%(Y8)Year%(M8)Month%(D8)Day\nShengxiao:%(shengxiao)\n<span foreground=\"blue\">%s</span>\n"), jieri);
@@ -255,7 +255,7 @@ void  lunar_calendar_day_selected(XtkCalendar *calendar)
 	g_free(strtime);
 }
 
-static gchar *calendar_detail_cb(XtkCalendar *gcalendar, 
+static gchar *calendar_detail_cb(DLtkCalendar *gcalendar, 
                                  guint        year, 
                                  guint        month, 
                                  guint        day, 

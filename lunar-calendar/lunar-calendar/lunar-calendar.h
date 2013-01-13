@@ -23,7 +23,7 @@
 #define __LUNAR_CALENDAR_H__  1
 
 /* TODO: do not using ugly GtkCalendar */
-#include <xtk/xtk.h>
+#include <dltk/dltk.h>
 
 G_BEGIN_DECLS
 
@@ -40,13 +40,13 @@ typedef struct _LunarCalendarPrivate      LunarCalendarPrivate;
 
 struct _LunarCalendar
 {
-	XtkCalendar		calendar;
+	DLtkCalendar		calendar;
 	LunarCalendarPrivate   *priv;
 };
 
 struct _LunarCalendarClass
 {
-	XtkCalendarClass     parent_class;
+	DLtkCalendarClass     parent_class;
 };
 
 GType		lunar_calendar_get_type				(void) G_GNUC_CONST;

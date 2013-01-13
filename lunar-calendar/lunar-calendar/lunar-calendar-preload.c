@@ -21,27 +21,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
-#include <xtk/xtk.h>
+#include <dltk/dltk.h>
 #include <lunar-calendar/lunar-calendar.h>
 
-GtkWidget* xtk_calendar_new (void)
+GtkWidget* dltk_calendar_new (void)
 {
 	GtkWidget* calendar;
-	XtkCalendarDisplayOptions flags;
+	DLtkCalendarDisplayOptions flags;
 	calendar = lunar_calendar_new();
-	flags = xtk_calendar_get_display_options(XTK_CALENDAR(calendar));
-	flags |= XTK_CALENDAR_SHOW_DETAILS;
-	xtk_calendar_set_display_options(XTK_CALENDAR(calendar), flags);
+	flags = dltk_calendar_get_display_options(DLTK_CALENDAR(calendar));
+	flags |= DLTK_CALENDAR_SHOW_DETAILS;
+	dltk_calendar_set_display_options(DLTK_CALENDAR(calendar), flags);
 	return calendar;
 }
 
-void  xtk_calendar_set_display_options (XtkCalendar *calendar, XtkCalendarDisplayOptions flags)
+void  dltk_calendar_set_display_options (DLtkCalendar *calendar, DLtkCalendarDisplayOptions flags)
 {
 	void *handle;
 	char *error;
-	void  (* _xtk_calendar_set_display_options) (XtkCalendar *calendar, XtkCalendarDisplayOptions flags) = NULL;
+	void  (* _dltk_calendar_set_display_options) (DLtkCalendar *calendar, DLtkCalendarDisplayOptions flags) = NULL;
 
-	handle = dlopen("/usr/lib/libxtk-2.0.so", RTLD_LAZY);
+	handle = dlopen("/usr/lib/libdltk-2.0.so", RTLD_LAZY);
 	if (!handle) {
 		fprintf(stderr, "%s\n", dlerror());
 		exit(EXIT_FAILURE);
@@ -49,8 +49,8 @@ void  xtk_calendar_set_display_options (XtkCalendar *calendar, XtkCalendarDispla
 
 	dlerror();
 
-	flags |= XTK_CALENDAR_SHOW_DETAILS;
-	*(void **) (&_xtk_calendar_set_display_options) = dlsym(handle, "xtk_calendar_display_options");
+	flags |= DLTK_CALENDAR_SHOW_DETAILS;
+	*(void **) (&_dltk_calendar_set_display_options) = dlsym(handle, "dltk_calendar_display_options");
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -58,12 +58,12 @@ void  xtk_calendar_set_display_options (XtkCalendar *calendar, XtkCalendarDispla
 	}
 	dlclose(handle);
 
-	(*_xtk_calendar_set_display_options) (calendar, flags);
+	(*_dltk_calendar_set_display_options) (calendar, flags);
 }
 
-void  xtk_calendar_display_options (XtkCalendar *calendar, XtkCalendarDisplayOptions flags)
+void  dltk_calendar_display_options (DLtkCalendar *calendar, DLtkCalendarDisplayOptions flags)
 {
-	xtk_calendar_set_display_options (calendar, flags);
+	dltk_calendar_set_display_options (calendar, flags);
 }
 
 gpointer g_object_newv (GType object_type, guint n_parameters, GParameter *parameters)
@@ -88,7 +88,7 @@ gpointer g_object_newv (GType object_type, guint n_parameters, GParameter *param
 	}
 	dlclose(handle);
 
-	if (g_type_is_a(object_type, g_type_from_name("XtkCalendar")))
+	if (g_type_is_a(object_type, g_type_from_name("DLtkCalendar")))
 		object_type = lunar_calendar_get_type();
 	return (*_g_object_newv) (object_type, n_parameters, parameters);
 }

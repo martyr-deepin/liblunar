@@ -55,7 +55,7 @@ enum
 };
 
 /*
- * XtkCalendar
+ * DLtkCalendar
  */
 
 static void
@@ -66,7 +66,7 @@ calendar_date_to_string (CalendarData *data,
   GDate *date;
   guint year, month, day;
 
-  xtk_calendar_get_date (XTK_CALENDAR(data->window),
+  dltk_calendar_get_date (DLTK_CALENDAR(data->window),
 			 &year, &month, &day);
   date = g_date_new_dmy (day, month + 1, year);
   g_date_strftime (buffer, buff_len-1, "%x", date);
@@ -108,7 +108,7 @@ calendar_update_details (CalendarData *data)
   guint year, month, day;
   gchar *detail;
 
-  xtk_calendar_get_date (XTK_CALENDAR (data->calendar_widget), &year, &month, &day);
+  dltk_calendar_get_date (DLTK_CALENDAR (data->calendar_widget), &year, &month, &day);
   detail = calendar_get_detail (data, year, month, day);
 
   g_signal_handler_block (data->details_buffer, data->details_changed);
@@ -165,13 +165,13 @@ calendar_day_selected_double_click (GtkWidget    *widget,
   calendar_date_to_string (data, buffer+27, 256-27);
   calendar_set_signal_strings (buffer, data);
 
-  xtk_calendar_get_date (XTK_CALENDAR (data->window),
+  dltk_calendar_get_date (DLTK_CALENDAR (data->window),
 			 NULL, NULL, &day);
 
-//  if (XTK_CALENDAR (data->window)->marked_date[day-1] == 0) {
-//    xtk_calendar_mark_day (XTK_CALENDAR (data->window), day);
+//  if (DLTK_CALENDAR (data->window)->marked_date[day-1] == 0) {
+//    dltk_calendar_mark_day (DLTK_CALENDAR (data->window), day);
 //  } else { 
-//    xtk_calendar_unmark_day (XTK_CALENDAR (data->window), day);
+//    dltk_calendar_unmark_day (DLTK_CALENDAR (data->window), day);
 //  }
 }
 
@@ -226,7 +226,7 @@ calendar_set_flags (CalendarData *calendar)
       options=options + (1 << i);
 
   if (calendar->window)
-    xtk_calendar_set_display_options (XTK_CALENDAR (calendar->window), options);
+    dltk_calendar_set_display_options (DLTK_CALENDAR (calendar->window), options);
 }
 
 static void
@@ -271,7 +271,7 @@ void calendar_select_font (GtkWidget    *button,
 }
 
 static gchar*
-calendar_detail_cb (XtkCalendar *calendar,
+calendar_detail_cb (DLtkCalendar *calendar,
                     guint        year,
                     guint        month,
                     guint        day,
@@ -291,7 +291,7 @@ calendar_details_changed (GtkTextBuffer *buffer,
   gtk_text_buffer_get_start_iter(buffer, &start);
   gtk_text_buffer_get_end_iter(buffer, &end);
 
-  xtk_calendar_get_date (XTK_CALENDAR (data->calendar_widget), &year, &month, &day);
+  dltk_calendar_get_date (DLTK_CALENDAR (data->calendar_widget), &year, &month, &day);
   detail = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 
   if (!detail[0])
@@ -308,7 +308,7 @@ static void
 demonstrate_details (CalendarData *data)
 {
   static char *rainbow[] = { "#900", "#980", "#390", "#095", "#059", "#309", "#908" };
-  XtkCalendar *calendar = XTK_CALENDAR (data->calendar_widget);
+  DLtkCalendar *calendar = DLTK_CALENDAR (data->calendar_widget);
   gint row, col;
 
   for (row = 0; row < 6; ++row)
@@ -358,10 +358,10 @@ calendar_toggle_details (GtkWidget    *widget,
                          CalendarData *data)
 {
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-    xtk_calendar_set_detail_func (XTK_CALENDAR (data->calendar_widget),
+    dltk_calendar_set_detail_func (DLTK_CALENDAR (data->calendar_widget),
                                   calendar_detail_cb, data, NULL);
   else
-    xtk_calendar_set_detail_func (XTK_CALENDAR (data->calendar_widget),
+    dltk_calendar_set_detail_func (DLTK_CALENDAR (data->calendar_widget),
                                   NULL, NULL, NULL);
 }
 
@@ -409,7 +409,7 @@ detail_width_changed (GtkSpinButton *button,
                       CalendarData  *data)
 {
   gint value = (gint) gtk_spin_button_get_value (button);
-  xtk_calendar_set_detail_width_chars (XTK_CALENDAR (data->calendar_widget), value);
+  dltk_calendar_set_detail_width_chars (DLTK_CALENDAR (data->calendar_widget), value);
 }
 
 static void
@@ -417,7 +417,7 @@ detail_height_changed (GtkSpinButton *button,
                       CalendarData  *data)
 {
   gint value = (gint) gtk_spin_button_get_value (button);
-  xtk_calendar_set_detail_height_rows (XTK_CALENDAR (data->calendar_widget), value);
+  dltk_calendar_set_detail_height_rows (DLTK_CALENDAR (data->calendar_widget), value);
 }
 
 static void
@@ -455,7 +455,7 @@ create_calendar(void)
     calendar_data.settings[i] = 0;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "XtkCalendar Example");
+  gtk_window_set_title (GTK_WINDOW (window), "DLtkCalendar Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 12);
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit),
@@ -474,7 +474,7 @@ create_calendar(void)
 
   calendar_data.window = calendar;
   calendar_set_flags(&calendar_data);
-  xtk_calendar_mark_day (XTK_CALENDAR (calendar), 19);	
+  dltk_calendar_mark_day (DLTK_CALENDAR (calendar), 19);	
 
   g_signal_connect (calendar, "month_changed", 
 		    G_CALLBACK (calendar_month_changed),
@@ -549,7 +549,7 @@ create_calendar(void)
 
   button = gtk_spin_button_new_with_range (0, 127, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (button),
-                             xtk_calendar_get_detail_width_chars (XTK_CALENDAR (calendar)));
+                             dltk_calendar_get_detail_width_chars (DLTK_CALENDAR (calendar)));
 
   g_signal_connect (button, "value-changed",
                     G_CALLBACK (detail_width_changed),
@@ -569,7 +569,7 @@ create_calendar(void)
 
   button = gtk_spin_button_new_with_range (0, 127, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (button),
-                             xtk_calendar_get_detail_height_rows (XTK_CALENDAR (calendar)));
+                             dltk_calendar_get_detail_height_rows (DLTK_CALENDAR (calendar)));
 
   g_signal_connect (button, "value-changed",
                     G_CALLBACK (detail_height_changed),

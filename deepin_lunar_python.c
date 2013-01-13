@@ -245,7 +245,7 @@ static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args)
         return NULL;                                                            
     }            
 
-    xtk_calendar_mark_day(self->handle, day);
+    dltk_calendar_mark_day(self->handle, day);
 
     Py_INCREF(Py_True);                                                         
     return Py_True; 
