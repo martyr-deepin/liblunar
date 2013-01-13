@@ -1,9 +1,9 @@
-liblunar for Xtk+-2.0
+liblunar for DLtk+-2.0
 
 depend
 ======
-Xtk+-2.0
-git clone git@github.com:xiangzhai/xtk.git
+DLtk+-2.0
+git clone git@github.com:xiangzhai/dltk.git
 
 build && install
 ================
