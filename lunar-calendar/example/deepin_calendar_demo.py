@@ -43,6 +43,9 @@ from dtk.ui.constant import DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
 import gtk
 import deepin_lunar
 
+def __day_selected(widget, argv):
+    print "DEBUG", argv.get_date()
+
 if __name__ == "__main__":
     # Init application.
     application = Application()
@@ -64,12 +67,14 @@ if __name__ == "__main__":
         "LunarCalendar demo",
         )
     
-    # Add Scalebar.
     deepin_lunar_obj = deepin_lunar.new()
+    deepin_lunar_obj.set_editable(True)
+    deepin_lunar_obj.get_handle().set_size_request(400, 300)
+    deepin_lunar_obj.get_handle().connect("day-selected", __day_selected, deepin_lunar_obj)
     align = gtk.Alignment()
-    align.set(0.5, 0.5, 1, 1)
-    align.set_padding(0, 2, 2, 2)
-    align.add(deepin_lunar_obj)
+    align.set(0, 0, 0, 0)
+    align.set_padding(10, 10, 10, 10)
+    align.add(deepin_lunar_obj.get_handle())
     
     application.main_box.pack_start(align)
 

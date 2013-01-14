@@ -24,6 +24,7 @@
 #include <lunar-calendar/lunar-calendar.h>
 
 #define ERROR(v) PyErr_SetString(PyExc_TypeError, v)
+#define INT(v) PyInt_FromLong(v)
 
 /* Safe XDECREF for object states that handles nested deallocations */
 #define ZAP(v) do {\
@@ -50,8 +51,9 @@ static PyMethodDef deepin_lunar_methods[] =
     {NULL, NULL, 0, NULL}
 };
 
-static PyObject *m_get_handle(DeepinLunarObject *self);
 static PyObject *m_delete(DeepinLunarObject *self);
+static PyObject *m_get_handle(DeepinLunarObject *self);
+static PyObject *m_get_date(DeepinLunarObject *self);
 static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args);
 static PyObject *m_clear_marks(DeepinLunarObject *self);
 static PyObject *m_set_editable(DeepinLunarObject *self, PyObject *args);
@@ -60,6 +62,7 @@ static PyMethodDef deepin_lunar_object_methods[] =
 {
     {"delete", m_delete, METH_NOARGS, "Deepin Lunar Object Destruction"}, 
     {"get_handle", m_get_handle, METH_NOARGS, "Get pygobject"}, 
+    {"get_date", m_get_date, METH_NOARGS, "Get Date"}, 
     {"mark_day", m_mark_day, METH_VARARGS, "Mark day"}, 
     {"clear_marks", m_clear_marks, METH_NOARGS, "Clear all Marks"}, 
     {"set_editable", m_set_editable, METH_VARARGS, "Set Editable status"}, 
@@ -284,4 +287,16 @@ static PyObject *m_set_editable(DeepinLunarObject *self, PyObject *args)
 
     Py_INCREF(Py_True);
     return Py_True;
+}
+
+static PyObject *m_get_date(DeepinLunarObject *self) 
+{
+    PyObject *date = NULL;
+    int year, month, day;
+
+    dltk_calendar_get_date(self->handle, &year, &month, &day);
+    /* FIXME: why need +1 for month */
+    date = PyTuple_Pack(3, INT(year), INT(month + 1), INT(day));
+
+    return date;
 }
