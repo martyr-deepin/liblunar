@@ -59,6 +59,7 @@ static PyMethodDef deepin_lunar_object_methods[] =
     {"delete", m_delete, METH_NOARGS, "Deepin Lunar Object Destruction"}, 
     {"get_handle", m_get_handle, METH_NOARGS, "Get pygobject"}, 
     {"mark_day", m_mark_day, METH_VARARGS, "Mark day"}, 
+    {"clear_marks", m_clear_marks, METH_NOARGS, "Clear all Marks"}, 
     {NULL, NULL, 0, NULL}
 };
 
@@ -249,4 +250,12 @@ static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args)
 
     Py_INCREF(Py_True);                                                         
     return Py_True; 
+}
+
+static PyObject *m_clear_marks(DeepinLunarObject *self) 
+{
+    dltk_calendar_clear_marks(self->handle);
+
+    Py_INCREF(Py_True);
+    return Py_True;
 }
