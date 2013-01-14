@@ -53,6 +53,8 @@ static PyMethodDef deepin_lunar_methods[] =
 static PyObject *m_get_handle(DeepinLunarObject *self);
 static PyObject *m_delete(DeepinLunarObject *self);
 static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args);
+static PyObject *m_clear_marks(DeepinLunarObject *self);
+static PyObject *m_set_editable(DeepinLunarObject *self, PyObject *args);
 
 static PyMethodDef deepin_lunar_object_methods[] = 
 {
@@ -60,6 +62,7 @@ static PyMethodDef deepin_lunar_object_methods[] =
     {"get_handle", m_get_handle, METH_NOARGS, "Get pygobject"}, 
     {"mark_day", m_mark_day, METH_VARARGS, "Mark day"}, 
     {"clear_marks", m_clear_marks, METH_NOARGS, "Clear all Marks"}, 
+    {"set_editable", m_set_editable, METH_VARARGS, "Set Editable status"}, 
     {NULL, NULL, 0, NULL}
 };
 
@@ -255,6 +258,29 @@ static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args)
 static PyObject *m_clear_marks(DeepinLunarObject *self) 
 {
     dltk_calendar_clear_marks(self->handle);
+
+    Py_INCREF(Py_True);
+    return Py_True;
+}
+
+static PyObject *m_set_editable(DeepinLunarObject *self, PyObject *args) 
+{
+    PyObject *value = NULL;                                                     
+                                                                                
+    if (!PyArg_ParseTuple(args, "O", &value)) {                          
+        ERROR("invalid arguments to set_editable");                                                    
+        return NULL;                                                        
+    }                                                                           
+                                                                                
+    if (!PyBool_Check(value)) {                                                 
+        Py_INCREF(Py_False);                                                    
+        return Py_False;                                                        
+    }                                                                           
+                                                                                
+    if (value == Py_True)    
+        dltk_calendar_set_editable(self->handle, TRUE);
+    else
+        dltk_calendar_set_editable(self->handle, FALSE);
 
     Py_INCREF(Py_True);
     return Py_True;
