@@ -54,6 +54,7 @@ static PyMethodDef deepin_lunar_methods[] =
 static PyObject *m_delete(DeepinLunarObject *self);
 static PyObject *m_get_handle(DeepinLunarObject *self);
 static PyObject *m_get_date(DeepinLunarObject *self);
+static PyObject *m_set_day_padding(DeepinLunarObject *self, PyObject *args);
 static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args);
 static PyObject *m_clear_marks(DeepinLunarObject *self);
 static PyObject *m_set_editable(DeepinLunarObject *self, PyObject *args);
@@ -63,6 +64,7 @@ static PyMethodDef deepin_lunar_object_methods[] =
     {"delete", m_delete, METH_NOARGS, "Deepin Lunar Object Destruction"}, 
     {"get_handle", m_get_handle, METH_NOARGS, "Get pygobject"}, 
     {"get_date", m_get_date, METH_NOARGS, "Get Date"}, 
+    {"set_day_padding", m_set_day_padding, METH_VARARGS, "Set day padding"}, 
     {"mark_day", m_mark_day, METH_VARARGS, "Mark day"}, 
     {"clear_marks", m_clear_marks, METH_NOARGS, "Clear all Marks"}, 
     {"set_editable", m_set_editable, METH_VARARGS, "Set Editable status"}, 
@@ -241,6 +243,21 @@ static PyObject *m_delete(DeepinLunarObject *self)
 
     Py_INCREF(Py_None);
     return Py_None;
+}
+
+static PyObject *m_set_day_padding(DeepinLunarObject *self, PyObject *args) 
+{
+    gint day_padding = 0;                                                              
+                                                                                
+    if (!PyArg_ParseTuple(args, "i", &day_padding)) {                                   
+        ERROR("invalid arguments to set_day_padding");                                 
+        return NULL;                                                            
+    }                                                                           
+                                                                                
+    dltk_calendar_set_day_padding(self->handle, day_padding);                                  
+                                                                                
+    Py_INCREF(Py_True);                                                         
+    return Py_True;
 }
 
 static PyObject *m_mark_day(DeepinLunarObject *self, PyObject *args) 
