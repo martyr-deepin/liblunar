@@ -247,7 +247,7 @@ void  lunar_calendar_day_selected(DLtkCalendar *calendar)
 	dltk_calendar_get_date(calendar, &year, &month, &day);
 	lunar_date_set_solar_date(priv->date, year, month + 1, day, 0, &error);
 	char *jieri = lunar_date_get_jieri(priv->date, "\n");
-	char *format = g_strdup_printf(_("%(year)-%(month)-%(day)\nLunar:%(YUE)Month%(RI)Day\nGanzhi:%(Y60)Year%(M60)Month%(D60)Day\nBazi:%(Y8)Year%(M8)Month%(D8)Day\nShengxiao:%(shengxiao)\n<span foreground=\"blue\">%s</span>\n"), jieri);
+	char *format = g_strdup_printf(_("%(year)-%(month)-%(day)\nLunar:%(YUE)Month%(RI)Day\nGanzhi:%(Y60)Year%(M60)Month%(D60)Day\nBazi:%(Y8)Year%(M8)Month%(D8)Day\nShengxiao:%(shengxiao)\n<span foreground=\"white\">%s</span>\n"), jieri);
 	char *strtime = lunar_date_strftime(priv->date, format);
 	gtk_widget_set_tooltip_markup(GTK_WIDGET(calendar), strtime);
 	g_free(format);
@@ -320,8 +320,3 @@ static void lunar_calendar_init_i18n(void)
       _lunar_calendar_gettext_initialized = TRUE;
     }
 }
-
-
-/*
-vi:ts=4:wrap:ai:
-*/
