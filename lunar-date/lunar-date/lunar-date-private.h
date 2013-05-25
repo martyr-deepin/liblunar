@@ -31,7 +31,14 @@ G_BEGIN_DECLS
 
 #define REFERENCE_YEAR	1201
 #define BEGIN_YEAR	1900	/* Note that LC1900.1.1 is SC1900.1.31 */
-#define NUM_OF_YEARS 150
+// I was born in 1983, so I could not be a 100 years old guy :)
+// But I am not afraid about death because an individual human existence 
+// should be like a river - small at first, narrowly contained within its 
+// banks, and rushing passionately past boulders and over waterfalls. 
+// Gradually the river grows wider, the banks recede, the waters flow more 
+// quietly, and in the end, without any visible break, they become merged 
+// in the sea, and painlessly lose their individual being.
+#define NUM_OF_YEARS 180
 #define NUM_OF_MONTHS 13
 
 typedef struct	_CLDate				 CLDate;
