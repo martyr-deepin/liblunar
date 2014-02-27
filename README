@@ -1,6 +1,6 @@
 liblunar for DLtk+-2.0
 
-depend
+依赖
 ======
 DLtk+-2.0
 git clone git@github.com:linuxdeepin/dltk.git
